@@ -1,0 +1,33 @@
+{
+  "name": "sails-plugin",
+  "version": "0.0.1",
+  "description": "A plugin loader for sails.js",
+  "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/jshint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/ncbitbucket/sails-plugin-loader"
+  },
+  "keywords": [
+    "sails",
+    "plugin"
+  ],
+  "author": {
+    "name": "Stefan Aebischer",
+    "email": "@pixtron"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "http://github.com/pixtron/sails-plugin/issues"
+  },
+  "devDependencies": {
+    "jshint": "^2.7.0"
+  },
+  "engines": {
+    "node": ">= 0.10.0",
+    "npm": ">= 1.4.0"
+  }
+}
