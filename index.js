@@ -25,6 +25,7 @@ module.exports = function(sails) {
         paths: {
           controllers: 'api/controllers',
           models: 'api/models',
+          services: 'api/services',
         }
       });
     },
@@ -121,6 +122,32 @@ module.exports = function(sails) {
         });
       });
     },
+
+
+
+
+    /**
+     * Load app services
+     *
+     * @param {Function} cb
+     */
+    loadServices: function (cb) {
+      async.reduce(Object.keys(sails.config.plugins.register), {}, function(memo, pluginName, cb) {
+        var plugin = sails.config.plugins.register[pluginName];
+
+        loadServicesFromPath(getPluginLookupPath(plugin.path, 'services'), function(err, services) {
+          if (err) {return cb(err);}
+          return cb(null, sails.util.merge(memo, services));
+        });
+      }, function(err, pluginServices) {
+        if (err) {return cb(err);}
+
+        loadServicesFromPath(sails.config.paths.services, function(err, services) {
+          if(err) {return cb(err);}
+          return bindToSails(cb)(null, sails.util.merge(pluginServices, services));
+        });
+      });
+    }
   };
 
   function bindToSails(cb) {
@@ -167,6 +194,15 @@ module.exports = function(sails) {
         return cb(null, sails.util.merge(models, supplements));
       });
     });
+  }
+
+  function loadServicesFromPath(path, cb) {
+    buildDictionary.optional({
+      dirname     : path,
+      filter      : /(.+)\.(js|coffee|litcoffee)$/,
+      depth     : 1,
+      caseSensitive : true
+    }, cb);
   }
 
   function getPluginLookupPath(pluginPath, type) {
