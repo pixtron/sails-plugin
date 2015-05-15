@@ -24,6 +24,7 @@ module.exports = function(sails) {
         register: {},
         paths: {
           controllers: 'api/controllers',
+          models: 'api/models',
         }
       });
     },
@@ -94,6 +95,32 @@ module.exports = function(sails) {
         });
       });
     },
+
+
+
+
+    /**
+     * Load plugin and app model definitions
+     *
+     * @param {Function} cb
+     */
+    loadModels: function (cb) {
+      async.reduce(Object.keys(sails.config.plugins.register), {}, function(memo, pluginName, cb) {
+        var plugin = sails.config.plugins.register[pluginName];
+
+        loadModelsFromPath(getPluginLookupPath(plugin.path, 'models'), function(err, models) {
+          if (err) {return cb(err);}
+          return cb(null, sails.util.merge(memo, models));
+        });
+      }, function(err, pluginModels) {
+        if (err) {return cb(err);}
+
+        loadModelsFromPath(sails.config.paths.models, function(err, models) {
+          if(err) {return cb(err);}
+          return bindToSails(cb)(null, sails.util.merge(pluginModels, models));
+        });
+      });
+    },
   };
 
   function bindToSails(cb) {
@@ -117,6 +144,29 @@ module.exports = function(sails) {
       keepDirectoryPath: true,
       replaceExpr: /Controller/
     }, cb);
+  }
+
+  function loadModelsFromPath(path, cb) {
+    // Get the main model files
+    buildDictionary.optional({
+      dirname   : path,
+      filter    : /^([^.]+)\.(js|coffee|litcoffee)$/,
+      replaceExpr : /^.*\//,
+      flattenDirectories: true
+    }, function(err, models) {
+      if (err) {return cb(err);}
+
+      // Get any supplemental files
+      buildDictionary.optional({
+        dirname   : path,
+        filter    : /(.+)\.attributes.json$/,
+        replaceExpr : /^.*\//,
+        flattenDirectories: true
+      }, function(err, supplements) {
+        if (err) {return cb(err);}
+        return cb(null, sails.util.merge(models, supplements));
+      });
+    });
   }
 
   function getPluginLookupPath(pluginPath, type) {
