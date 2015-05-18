@@ -19,3 +19,5 @@ options.moduleLoaderOverride = require('sails-plugin');
 sails.lift(options);
 ```
 
+##TODO
+See [open issues](https://github.com/pixtron/sails-plugin/labels/todo)
