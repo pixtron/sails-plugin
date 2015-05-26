@@ -1,9 +1,9 @@
-#sails-plugin
+# sails-plugin
 
 A plugin loader for sails.js. This module only works if you lift sails programaticaly.
 It won't work with `sails lift` on the command line.
 
-##Usage
+## Usage
 
 ```
 npm install --save sails-plugin
@@ -19,5 +19,5 @@ options.moduleLoaderOverride = require('sails-plugin');
 sails.lift(options);
 ```
 
-##TODO
+## TODO
 See [open issues](https://github.com/pixtron/sails-plugin/labels/todo)
