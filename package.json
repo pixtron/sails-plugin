@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/ncbitbucket/sails-plugin-loader"
+    "url": "git://github.com/pixtron/sails-plugin.git"
   },
   "keywords": [
     "sails",
