@@ -31,6 +31,9 @@
   "devDependencies": {
     "jshint": "^2.7.0"
   },
+  "peerDependencies": {
+    "sails": "~0.11.0"
+  },
   "engines": {
     "node": ">= 0.10.0",
     "npm": ">= 1.4.0"
